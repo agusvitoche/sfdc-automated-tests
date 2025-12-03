@@ -1,12 +1,17 @@
 /**
- * @description       : Mock for Salesforce Tooling API
- * @author            : Agustín M. Etcheverry
- * @last modified on  : 04-15-2022
- * @last modified by  : Agustín M. Etcheverry
+ * @description       : Mock for test tooling api requests
+ * @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+ * @last modified on  : 03-27-2022
+ * @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
 **/
-@isTest
-public class ToolingApiMock implements HttpCalloutMock {
-
+public with sharing class ToolingApiMock {
+    
+    /**
+    * @description Mock responde from tooling api
+    * @author ChangeMeIn@UserSettingsUnder.SFDoc | 03-27-2022 
+    * @param req Request maded it to tooling api
+    * @return HTTPResponse Mocked response
+    **/
     public HTTPResponse respond(HTTPRequest req) {
         
         // Response by default
@@ -23,6 +28,11 @@ public class ToolingApiMock implements HttpCalloutMock {
         return res;
     }
     
+    /**
+    * @description Generate fake apex test code coverage json
+    * @author ChangeMeIn@UserSettingsUnder.SFDoc | 03-27-2022 
+    * @return HttpResponse Fake apex test code coverage json response
+    **/
     private static HttpResponse getApexCodeCoverageAggregateResponse() {
         HttpResponse res = new HttpResponse();
         res.setHeader('Content-Type', 'application/json');
@@ -30,5 +40,5 @@ public class ToolingApiMock implements HttpCalloutMock {
         res.setStatusCode(200);
         return res;
     }
-    
+
 }

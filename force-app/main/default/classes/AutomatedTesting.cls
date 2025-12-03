@@ -1,18 +1,34 @@
 /**
- * @description       : Automate Salesforce Apex test methods execution
- * @author            : Agustín M. Etcheverry
- * @last modified on  : 04-15-2022
- * @last modified by  : Agustín M. Etcheverry
+ * @description       : Helper to execute apex test methods and send email resume
+ * @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+ * @last modified on  : 03-27-2022
+ * @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
 **/
 public with sharing class AutomatedTesting {
     
-    // Create Custom Metadata Type
+    /**
+     * Set your apex classes that has 'test' in its name
+     * TODO: Move to CMT
+     */
     private static String[] EXCLUDED_CLASSES = new String[] {};
+
+    /**
+     * Email addresses to send email resume
+     * TODO: Move to CMT
+     */
     private static String[] NOTIFICATION_EMAILS = new String[] {};
 
+    
+    /**
+    * @description Start apex test execution
+    * @author ChangeMeIn@UserSettingsUnder.SFDoc | 03-27-2022 
+    * @return Id Apex test execution job id
+    **/
     public static Id enqueueTests() {
         System.debug('AutomatedTesting - enqueueTests - START');
 
+        // Get all classes with 'test' in its name
+        // TODO: A better way to get only test classes??
         List<ApexClass> testClasses = [SELECT Id, Name
                                        FROM ApexClass
                                        WHERE Name LIKE '%Test%'
@@ -48,7 +64,13 @@ public with sharing class AutomatedTesting {
         System.debug('AutomatedTesting - enqueueTests - END: ' + jobId);
         return jobId;
     }
-
+    
+    /**
+    * @description Send email with apex test execution resume
+    * @author ChangeMeIn@UserSettingsUnder.SFDoc | 03-27-2022 
+    * @param jobId Apex test execution job id
+    * @return Messaging.SingleEmailMessage Email sended
+    **/
     public static Messaging.SingleEmailMessage emailTestStatus(Id jobId) {
         System.debug('AutomatedTesting - emailTestStatus - START: ' + jobId);
 
@@ -138,6 +160,11 @@ public with sharing class AutomatedTesting {
         return statusMail;
     }
 
+    /**
+    * @description Get percent code coverage for each class
+    * @author ChangeMeIn@UserSettingsUnder.SFDoc | 03-27-2022 
+    * @return Map<String, Decimal> Percent code coverage for each class
+    **/
     public static Map<String, Decimal> getCodeCoverageByClass() {
         System.debug('AutomatedTesting - getCodeCoverageByClass - START');
 
@@ -153,11 +180,11 @@ public with sharing class AutomatedTesting {
 
             for(CodeCoverageWrapper.Records records : codeCoverageWrapper.records) {
                 
-                String classOrTriggerName = records.ApexClassOrTrigger.Name;
+                String classOrTriggerName = records.apexClassOrTrigger.Name;
                 System.debug('AutomatedTesting - getCodeCoverageByClass - classOrTriggerName: ' + classOrTriggerName);
-                Decimal numLinesCovered = records.NumLinesCovered;
+                Decimal numLinesCovered = records.numLinesCovered;
                 System.debug('AutomatedTesting - getCodeCoverageByClass - numLinesCovered: ' + numLinesCovered);
-                Decimal numLinesUncovered = records.NumLinesUncovered;
+                Decimal numLinesUncovered = records.numLinesUncovered;
                 System.debug('AutomatedTesting - getCodeCoverageByClass - numLinesUncovered: ' + numLinesUncovered);
                 Decimal totalNumberOfLines = numLinesCovered + numLinesUncovered;
                 System.debug('AutomatedTesting - getCodeCoverageByClass - totalNumberOfLines: ' + totalNumberOfLines);
@@ -177,6 +204,12 @@ public with sharing class AutomatedTesting {
         return codeCoverageByClass;
     }
 
+    /**
+    * @description Sort classes from highest to lowest percent code coverage
+    * @author ChangeMeIn@UserSettingsUnder.SFDoc | 03-27-2022 
+    * @param coverageMap Percent code coverage for each class
+    * @return Map<String, Decimal> Percent code coverage for each class sorted from highest to lowest
+    **/
     public static Map<String, Decimal> sortCodeCoverageMapByCoverage(Map<String, Decimal> coverageMap) {
         System.debug('AutomatedTesting - sortCodeCoverageMapByCoverage - START');
 
@@ -200,6 +233,11 @@ public with sharing class AutomatedTesting {
         return coverageToNameMap;
     }
 
+    /**
+    * @description Get last apex test execution job id
+    * @author ChangeMeIn@UserSettingsUnder.SFDoc | 03-27-2022 
+    * @return Id Last apex test execution job id
+    **/
     public static Id getLastTestExecution() {
         System.debug('AutomatedTesting - getLastTestExecution - START');
 
@@ -222,6 +260,12 @@ public with sharing class AutomatedTesting {
         return jobId;
     }
 
+    /**
+    * @description Make a tooling api request
+    * @author ChangeMeIn@UserSettingsUnder.SFDoc | 03-27-2022 
+    * @param strQuery Query for tooling api request
+    * @return HTTPResponse Request made it
+    **/
     @TestVisible
     private static HTTPResponse toolingApiRequest(String strQuery) {
         System.debug('AutomatedTesting - toolingApiRequest - START: ' + strQuery);

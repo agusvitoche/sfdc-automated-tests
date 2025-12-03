@@ -1,12 +1,15 @@
 /**
  * @description       : Test class for RunTestSchedulable
- * @author            : Agustín M. Etcheverry
- * @last modified on  : 04-15-2022
- * @last modified by  : Agustín M. Etcheverry
+ * @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+ * @last modified on  : 03-27-2022
+ * @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
 **/
-@isTest
 public with sharing class RunTestSchedulableTest {
     
+    /**
+    * @description 
+    * @author ChangeMeIn@UserSettingsUnder.SFDoc | 03-27-2022 
+    **/
     @isTest
     static void testExecute() {
         Test.startTest();
